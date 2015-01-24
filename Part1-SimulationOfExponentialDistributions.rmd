@@ -1,0 +1,29 @@
+Simulation of many exponential distributions
+========================================================
+Mathew Bramson
+
+In this analysis, we will take the mean of 40 random observations of an exponential distribution with a lambda of 0.2. We will then repeat this process 1000 times, and take the mean of those 1000 experiments. As the central limit theorem predicts, the observed mean and variance of these 1000 experiments should be approximately equal to the predicted theoretical mean and variance. The distribution of these 1000 experiments should appear normal.
+
+Set up the code.
+```{r}
+setwd("~/R/StatisticalInference/SimulationCentralLimit")
+set.seed(3)
+mns = NULL
+for(i in 1:1000) mns = c(mns, mean(rexp(40,0.2)))
+hist(mns, breaks=20)
+```
+
+The above figure is a histogram of all the means of 1000 exponential distributions sampling 40 times with a lambda of 0.2. As you can see, this distribution appears to be a normal distribution centered around the mean of 1 / 0.2 = 5, as expected.
+
+The theoretical mean of the distribution is 1 / lambda which is equal to 5. The mean of the 1000 exponential distributions is `r mean(mns)`.
+
+As you can see this is very close to the actual mean of the distribution. As we increase the number of simulations, this mean will converge to the actualy mean of 5.
+
+The variance of the distribution of exponential distributions is `r var(mns)`. The variance of an exponential distribution is 1 / lambda = 5. Using the central limit theorem, we know that the variance of the distribution of distributions should be the 5^2 / 40 = 0.625. This is very close to the variance observed: `r var(mns)`. As we increase the number of samples, this variance will converge to the theoretical variance of 0.625.
+
+If we compare the distribution of means above we can see that it is roughly equivalent to the normal distribution with the theoretical values seen below:
+```{r} 
+hist(rnorm(1000,5,sqrt(0.625)), breaks=20)
+```
+
+We can conclude the the resulting distribution of the 1000 experiments is in fact a normal distribution. As we increase the number of experiments, the histogram will converge further to being a perfect normal distribution.
