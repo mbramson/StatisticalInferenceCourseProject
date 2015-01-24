@@ -1,0 +1,54 @@
+ToothGrowth Dataset Analysis
+========================================================
+Mathew Bramson
+
+
+``` {r}
+data(ToothGrowth)
+str(ToothGrowth)
+```
+
+Exploratory Data Analysis
+-------------------------------------------------------
+Let's see what we can find out about this dataset.
+```{r}
+library(ggplot2)
+```
+
+Below is how the data looks when you isolate the two supplements.
+
+```{r fig.height=4}
+ggplot(aes(x = supp, y = len), data = ToothGrowth) + 
+  geom_boxplot(aes(fill = supp))
+```
+
+We can clearly see that there are some differences between the supplements.
+
+Now let's slice the data according to the dose.
+
+```{r fig.height=4}
+ggplot(aes(x = factor(dose), y = len), data = ToothGrowth) +
+  geom_boxplot(aes(fill=dose))
+```
+
+We can clearly see that there are some differences between doses irregardles of the chosen supplement.
+
+Since there are clear changes in both slices, it'd be nice to see what the data looks like when you account for the dose and supplement.
+``` {r fig.height=4}
+ggplot(aes(x = factor(dose), y = len), data = ToothGrowth) +
+  geom_boxplot(aes(fill = dose)) + 
+  facet_wrap(~ supp)
+```
+
+Interestingly, it appears that the strongest effect on length comes from the dose. At lower dosages, OJ appears to have a larger effect than VC. However, at the 2.0 dosage, both supplements don't appear to have a signficantly different effect.
+
+Summary of the Data
+----------------------------------------------------------
+Let's take a look at a few descriptive statistics of the data.
+```{r}
+library(plyr)
+ddply(ToothGrowth,~supp + dose,summarise,count=length(len),min = min(len), firstQ = quantile(len,0.25),mean=mean(len),median=median(len),thirdQ=quantile(len,0.75),max=max(len),var=var(len),sd=sd(len))
+```
+
+There are 10 cases for each supplement/dose combination for a total of 60 data points.
+
